@@ -7,6 +7,7 @@ A tiny React app built with Vite. It includes a simple task list and a small aut
 - React + Vite
 - Vitest
 - React Testing Library
+- Playwright
 - GitHub Actions
 
 ## Run locally
@@ -31,6 +32,13 @@ Run the tests:
 npm test
 ```
 
+Run the end-to-end tests:
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```
+
 Build for production:
 
 ```bash
@@ -46,4 +54,6 @@ The test suite covers the core task-list behavior:
 - Deleting a task removes it from the list.
 - Toggling the color theme saves the dark-mode preference.
 
-The CI workflow runs `npm test` and `npm run build` on every push and pull request.
+The Playwright end-to-end test covers a browser-level flow for adding a task, completing it, filtering completed tasks, and switching to dark mode.
+
+The CI workflow runs `npm test`, `npm run build`, and `npm run test:e2e` on every push and pull request.
