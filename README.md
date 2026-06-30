@@ -44,5 +44,6 @@ The test suite covers the core task-list behavior:
 - Adding a new task clears the form and updates the active task count.
 - Completing a task updates the completed filter and remaining count.
 - Deleting a task removes it from the list.
+- Toggling the color theme saves the dark-mode preference.
 
 The CI workflow runs `npm test` and `npm run build` on every push and pull request.

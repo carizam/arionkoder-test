@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const initialTasks = [
   { id: 1, title: 'Write a small React app', completed: true },
@@ -6,6 +6,10 @@ const initialTasks = [
 ];
 
 const filters = ['all', 'active', 'completed'];
+
+function getInitialTheme() {
+  return localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
+}
 
 function TaskItem({ task, onToggle, onDelete }) {
   return (
@@ -29,6 +33,7 @@ export default function App() {
   const [tasks, setTasks] = useState(initialTasks);
   const [draft, setDraft] = useState('');
   const [filter, setFilter] = useState('all');
+  const [theme, setTheme] = useState(getInitialTheme);
 
   const visibleTasks = useMemo(() => {
     if (filter === 'active') {
@@ -43,6 +48,11 @@ export default function App() {
   }, [filter, tasks]);
 
   const remainingCount = tasks.filter((task) => !task.completed).length;
+  const isDarkTheme = theme === 'dark';
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   function addTask(event) {
     event.preventDefault();
@@ -72,11 +82,22 @@ export default function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className="app-shell" data-theme={theme}>
       <section className="todo-panel" aria-labelledby="app-title">
-        <div className="intro">
-          <p>Minimal Automation Exercise</p>
-          <h1 id="app-title">Team Tasks</h1>
+        <div className="header-row">
+          <div className="intro">
+            <p>Minimal Automation Exercise</p>
+            <h1 id="app-title">Team Tasks</h1>
+          </div>
+
+          <button
+            type="button"
+            className="theme-toggle"
+            aria-pressed={isDarkTheme}
+            onClick={() => setTheme(isDarkTheme ? 'light' : 'dark')}
+          >
+            {isDarkTheme ? 'Light' : 'Dark'}
+          </button>
         </div>
 
         <form className="task-form" onSubmit={addTask}>

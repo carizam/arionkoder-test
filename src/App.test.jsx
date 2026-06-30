@@ -3,6 +3,10 @@ import userEvent from '@testing-library/user-event';
 import App from './App.jsx';
 
 describe('Team Tasks app', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('adds a task and updates the active task count', async () => {
     const user = userEvent.setup();
 
@@ -40,5 +44,22 @@ describe('Team Tasks app', () => {
 
     expect(screen.queryByText('Automate core user flows')).not.toBeInTheDocument();
     expect(screen.getByText('0 active tasks left')).toBeInTheDocument();
+  });
+
+  it('toggles the color theme and saves the preference', async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    const themeToggle = screen.getByRole('button', { name: /dark/i });
+    expect(themeToggle).toHaveAttribute('aria-pressed', 'false');
+
+    await user.click(themeToggle);
+
+    expect(screen.getByRole('button', { name: /light/i })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(localStorage.getItem('theme')).toBe('dark');
   });
 });
